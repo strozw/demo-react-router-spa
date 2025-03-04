@@ -1,13 +1,16 @@
+import Hero from "~/components/ui/hero";
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
 
-export function meta({}: Route.MetaArgs) {
+const title = "New React Router SPA";
+const desc = "Welcome to React Router with TailwindCSS v4 SPA!";
+
+export function meta({ }: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title },
+    { name: "description", content: desc },
   ];
 }
 
 export default function Home() {
-  return <Welcome />;
+  return <Hero {...({ title, desc })} />;
 }
