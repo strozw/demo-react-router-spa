@@ -1,6 +1,6 @@
 import type { PropsWithChildren, ReactNode } from "react"
 
-export default function Hero({ title, desc, children }: PropsWithChildren<{ title: ReactNode, desc?: ReactNode }>) {
+export function Hero({ title, desc, children }: PropsWithChildren<{ title: ReactNode, desc?: ReactNode }>) {
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
       <div className="px-4 md:px-6">
@@ -20,4 +20,3 @@ export default function Hero({ title, desc, children }: PropsWithChildren<{ titl
     </section>
   )
 }
-

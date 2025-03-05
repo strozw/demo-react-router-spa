@@ -1,4 +1,4 @@
-import Hero from "~/components/ui/hero";
+import { Hero } from "#components/ui/hero.js";
 import type { Route } from "./+types/home";
 
 const title = "New React Router SPA";
