@@ -1,8 +1,9 @@
 import { Hero } from "@/components/ui/hero";
 import type { Route } from "./+types/home";
+import { href, useNavigate } from "react-router";
 
-const title = "New React Router SPA";
-const desc = "Welcome to React Router with TailwindCSS v4 SPA!";
+const title = "React Router SPA Demo";
+const desc = "React Router SPA を利用した蔵書管理アプリのデモ";
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -12,5 +13,7 @@ export function meta({ }: Route.MetaArgs) {
 }
 
 export default function Home() {
-  return <Hero {...({ title, desc })} />;
+  const navigate = useNavigate();
+
+  return <Hero {...({ title, desc, startText: "蔵書管理へ", onClickStart: () => navigate(href("/books")) })} />;
 }

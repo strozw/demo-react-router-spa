@@ -1,6 +1,15 @@
 import type { PropsWithChildren, ReactNode } from "react"
+import { Button } from "./button"
+import { href, useNavigate } from "react-router";
 
-export function Hero({ title, desc, children }: PropsWithChildren<{ title: ReactNode, desc?: ReactNode }>) {
+export function Hero({ title, desc, startText = "スタート", onClickStart, children }: PropsWithChildren<{
+  title: ReactNode,
+  desc?: ReactNode,
+  startText?: string
+  onClickStart?: () => void
+}>) {
+  const navigate = useNavigate();
+
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
       <div className="px-4 md:px-6">
@@ -15,6 +24,8 @@ export function Hero({ title, desc, children }: PropsWithChildren<{ title: React
           </div>
 
           {children}
+
+          {onClickStart && <Button onClick={onClickStart}>{startText}</Button>}
         </div>
       </div>
     </section>

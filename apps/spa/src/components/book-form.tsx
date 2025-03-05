@@ -33,7 +33,7 @@ interface BookFormProps {
 }
 
 export function BookForm({ bookId, onCancel }: BookFormProps) {
-  const { mutate: mutateToCreated } = useMutation(
+  const { mutate: mutateToCreated, error: errorAboutCreate } = useMutation(
     "post",
     "/books",
     {
@@ -43,7 +43,7 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
     },
   )
 
-  const { mutate: mutateToUpdated } = useMutation(
+  const { mutate: mutateToUpdated, error: errorAboutUpdate } = useMutation(
     "patch",
     "/books/{id}",
     {
@@ -67,6 +67,8 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
     body: book,
   });
 
+  const apiErrorMessage = errorAboutCreate?.message || errorAboutUpdate?.message
+
   const isEditing = !!bookId
 
   const form = useForm<BookFormValues>({
@@ -82,6 +84,14 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
       status: "available",
     },
   })
+
+  useEffect(() => {
+    switch (apiErrorMessage) {
+      case "ISBN already exists":
+        form.setError("isbn", { message: "このISBNはすでに登録されています" })
+        break
+    }
+  }, [apiErrorMessage])
 
   useEffect(() => {
     if (isEditing && book) {
