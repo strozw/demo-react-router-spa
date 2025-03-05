@@ -142,7 +142,7 @@ app.openapi(
 
       return c.json(result[0], 201);
     } catch (error) {
-      if (typeof error === 'object' && error && ('code' in error) && error.code === 'SQLITE_CONSTRAINT') {
+      if (typeof error === 'object' && error && ('code' in error) && error.code === 'SQLITE_CONSTRAINT_UNIQUE') {
         return c.json({ message: 'ISBN already exists' }, 400);
       }
       throw error;
