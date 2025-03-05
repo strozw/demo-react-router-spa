@@ -35,7 +35,7 @@ app.openapi(
     },
   }),
   async (c) => {
-    const result = await db.select().from(books);
+    const result: BookResponse[] = await db.select().from(books);
 
     return c.json(result, 200);
   }
@@ -87,9 +87,7 @@ app.openapi(
       return c.json({ message: 'Book not found' }, 404);
     }
 
-    const book: BookResponse = result[0]
-
-    return c.json(book, 200);
+    return c.json(result[0], 200);
   }
 );
 

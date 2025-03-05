@@ -9,7 +9,7 @@ export const books = sqliteTable('books', {
   publishedYear: integer('published_year').notNull(),
   genre: text('genre').notNull(),
   description: text('description').notNull(),
-  coverUrl: text('cover_url'),
+  coverUrl: text('cover_url').notNull(),
   status: text('status', { enum: ['available', 'borrowed', 'lost'] }).notNull().default('available'),
   createdAt: integer('created_at')
     .notNull()

@@ -1,9 +1,19 @@
 import { serve } from '@hono/node-server';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { swaggerUI } from '@hono/swagger-ui';
+import { cors } from 'hono/cors'
+import { logger } from 'hono/logger'
 import bookRoutes from './routes/book';
 
 const app = new OpenAPIHono();
+
+app.use(logger())
+
+app.use("/*", cors({
+  origin: "*",
+  allowMethods: ["GET", "POST", "PATCH", "DELETE", "HEAD"],
+  credentials: true,
+}))
 
 // OpenAPI Docs
 app.doc('/docs', {
