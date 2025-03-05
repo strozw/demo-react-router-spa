@@ -5,5 +5,5 @@ export default function BooksLayout() {
     <div className="px-4 py-4">
       <Outlet />
     </div>
-  )
+  );
 }

@@ -1,0 +1,6 @@
+# yaml と markdown 以外を除外する
+**
+!*.yaml
+!*.yml
+!*.md
+pnpm-lock.yaml

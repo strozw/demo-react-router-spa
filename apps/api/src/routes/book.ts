@@ -1,14 +1,14 @@
-import { OpenAPIHono, createRoute } from '@hono/zod-openapi';
-import { z } from 'zod';
+import { OpenAPIHono, createRoute } from "@hono/zod-openapi";
+import { eq } from "drizzle-orm";
+import { z } from "zod";
+import { db } from "../db";
+import { books } from "../db/schema";
 import {
+  type BookResponse,
+  bookResponseSchema,
   createBookSchema,
   updateBookSchema,
-  bookResponseSchema,
-  BookResponse,
-} from '../schema/book';
-import { db } from '../db';
-import { books } from '../db/schema';
-import { eq } from 'drizzle-orm';
+} from "../schema/book";
 
 const app = new OpenAPIHono();
 
@@ -19,15 +19,15 @@ const errorResponse = z.object({
 // List all books
 app.openapi(
   createRoute({
-    method: 'get',
-    path: '/',
-    tags: ['Books'],
-    summary: 'List all books',
+    method: "get",
+    path: "/",
+    tags: ["Books"],
+    summary: "List all books",
     responses: {
       200: {
-        description: 'List of books',
+        description: "List of books",
         content: {
-          'application/json': {
+          "application/json": {
             schema: z.array(bookResponseSchema),
           },
         },
@@ -38,37 +38,37 @@ app.openapi(
     const result: BookResponse[] = await db.select().from(books);
 
     return c.json(result, 200);
-  }
+  },
 );
 
 // Get a book by ID
 app.openapi(
   createRoute({
-    method: 'get',
-    path: '/{id}',
-    tags: ['Books'],
-    summary: 'Get a book by ID',
+    method: "get",
+    path: "/{id}",
+    tags: ["Books"],
+    summary: "Get a book by ID",
     parameters: [
       {
-        name: 'id',
-        in: 'path',
+        name: "id",
+        in: "path",
         required: true,
-        schema: { type: 'string' },
+        schema: { type: "string" },
       },
     ],
     responses: {
       200: {
-        description: 'Book details',
+        description: "Book details",
         content: {
-          'application/json': {
+          "application/json": {
             schema: bookResponseSchema,
           },
         },
       },
       404: {
-        description: 'Book not found',
+        description: "Book not found",
         content: {
-          'application/json': {
+          "application/json": {
             schema: errorResponse,
           },
         },
@@ -76,7 +76,7 @@ app.openapi(
     },
   }),
   async (c) => {
-    const id = c.req.param('id') ?? '';
+    const id = c.req.param("id") ?? "";
     const result = await db
       .select()
       .from(books)
@@ -84,24 +84,24 @@ app.openapi(
       .limit(1);
 
     if (result.length === 0) {
-      return c.json({ message: 'Book not found' }, 404);
+      return c.json({ message: "Book not found" }, 404);
     }
 
     return c.json(result[0], 200);
-  }
+  },
 );
 
 // Create a new book
 app.openapi(
   {
-    method: 'post',
-    path: '/',
-    tags: ['Books'],
-    summary: 'Create a new book',
+    method: "post",
+    path: "/",
+    tags: ["Books"],
+    summary: "Create a new book",
     request: {
       body: {
         content: {
-          'application/json': {
+          "application/json": {
             schema: createBookSchema,
           },
         },
@@ -109,17 +109,17 @@ app.openapi(
     },
     responses: {
       201: {
-        description: 'Book created successfully',
+        description: "Book created successfully",
         content: {
-          'application/json': {
+          "application/json": {
             schema: bookResponseSchema,
           },
         },
       },
       400: {
-        description: 'Invalid request',
+        description: "Invalid request",
         content: {
-          'application/json': {
+          "application/json": {
             schema: errorResponse,
           },
         },
@@ -127,7 +127,7 @@ app.openapi(
     },
   },
   async (c) => {
-    const data = c.req.valid('json');
+    const data = c.req.valid("json");
     const now = Date.now();
 
     try {
@@ -142,33 +142,38 @@ app.openapi(
 
       return c.json(result[0], 201);
     } catch (error) {
-      if (typeof error === 'object' && error && ('code' in error) && error.code === 'SQLITE_CONSTRAINT_UNIQUE') {
-        return c.json({ message: 'ISBN already exists' }, 400);
+      if (
+        typeof error === "object" &&
+        error &&
+        "code" in error &&
+        error.code === "SQLITE_CONSTRAINT_UNIQUE"
+      ) {
+        return c.json({ message: "ISBN already exists" }, 400);
       }
       throw error;
     }
-  }
+  },
 );
 
 // Update a book
 app.openapi(
   {
-    method: 'patch',
-    path: '/{id}',
-    tags: ['Books'],
-    summary: 'Update a book',
+    method: "patch",
+    path: "/{id}",
+    tags: ["Books"],
+    summary: "Update a book",
     parameters: [
       {
-        name: 'id',
-        in: 'path',
+        name: "id",
+        in: "path",
         required: true,
-        schema: { type: 'string' },
+        schema: { type: "string" },
       },
     ],
     request: {
       body: {
         content: {
-          'application/json': {
+          "application/json": {
             schema: updateBookSchema,
           },
         },
@@ -176,17 +181,17 @@ app.openapi(
     },
     responses: {
       200: {
-        description: 'Book updated successfully',
+        description: "Book updated successfully",
         content: {
-          'application/json': {
+          "application/json": {
             schema: bookResponseSchema,
           },
         },
       },
       404: {
-        description: 'Book not found',
+        description: "Book not found",
         content: {
-          'application/json': {
+          "application/json": {
             schema: errorResponse,
           },
         },
@@ -194,8 +199,8 @@ app.openapi(
     },
   },
   async (c) => {
-    const id = c.req.param('id') ?? '';
-    const data = c.req.valid('json');
+    const id = c.req.param("id") ?? "";
+    const data = c.req.valid("json");
 
     const result = await db
       .update(books)
@@ -204,36 +209,36 @@ app.openapi(
       .returning();
 
     if (result.length === 0) {
-      return c.json({ message: 'Book not found' }, 404);
+      return c.json({ message: "Book not found" }, 404);
     }
 
     return c.json(result[0], 200);
-  }
+  },
 );
 
 // Delete a book
 app.openapi(
   {
-    method: 'delete',
-    path: '/{id}',
-    tags: ['Books'],
-    summary: 'Delete a book',
+    method: "delete",
+    path: "/{id}",
+    tags: ["Books"],
+    summary: "Delete a book",
     parameters: [
       {
-        name: 'id',
-        in: 'path',
+        name: "id",
+        in: "path",
         required: true,
-        schema: { type: 'string' },
+        schema: { type: "string" },
       },
     ],
     responses: {
       204: {
-        description: 'Book deleted successfully',
+        description: "Book deleted successfully",
       },
       404: {
-        description: 'Book not found',
+        description: "Book not found",
         content: {
-          'application/json': {
+          "application/json": {
             schema: errorResponse,
           },
         },
@@ -241,22 +246,20 @@ app.openapi(
     },
   },
   async (c) => {
-    const id = c.req.param('id') ?? '';
+    const id = c.req.param("id") ?? "";
 
-    const book = (await db
-      .select()
-      .from(books)
-      .where(eq(books.id, id))
-      .limit(1)).at(0);
+    const book = (
+      await db.select().from(books).where(eq(books.id, id)).limit(1)
+    ).at(0);
 
     if (!book) {
-      return c.json({ message: 'Book not found' }, 404);
+      return c.json({ message: "Book not found" }, 404);
     }
 
     await db.delete(books).where(eq(books.id, id));
 
     return new Response(null, { status: 204 });
-  }
+  },
 );
 
 export default app;

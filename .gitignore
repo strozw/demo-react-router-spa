@@ -3,3 +3,10 @@
 
 # turborepo
 .turbo
+
+# dotenv
+.env
+
+# react-router
+.react-router
+build

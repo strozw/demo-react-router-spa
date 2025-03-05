@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Edit } from "lucide-react"
-import { useQuery } from "@/hooks/api"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { useQuery } from "@/hooks/api";
+import { ArrowLeft, Edit } from "lucide-react";
 
 interface BookDetailProps {
-  bookId: string
-  onBack: () => void
-  onEdit: () => void
+  bookId: string;
+  onBack: () => void;
+  onEdit: () => void;
 }
 
 export function BookDetail({ bookId, onBack, onEdit }: BookDetailProps) {
@@ -18,10 +18,10 @@ export function BookDetail({ bookId, onBack, onEdit }: BookDetailProps) {
     "/books/{id}",
     { params: { path: { id: bookId ?? "" } } },
     { enabled: !!bookId },
-  )
+  );
 
   if (isBookLoading) {
-    return <div>書籍情報を取得中...</div>
+    return <div>書籍情報を取得中...</div>;
   }
 
   if (!book) {
@@ -33,34 +33,34 @@ export function BookDetail({ bookId, onBack, onEdit }: BookDetailProps) {
           戻る
         </Button>
       </div>
-    )
+    );
   }
 
   const getStatusLabel = (status: typeof book.status) => {
     switch (status) {
       case "available":
-        return "利用可能"
+        return "利用可能";
       case "borrowed":
-        return "貸出中"
+        return "貸出中";
       case "lost":
-        return "紛失"
+        return "紛失";
       default:
-        return status
+        return status;
     }
-  }
+  };
 
   const getStatusColor = (status: typeof book.status) => {
     switch (status) {
       case "available":
-        return "bg-green-500"
+        return "bg-green-500";
       case "borrowed":
-        return "bg-yellow-500"
+        return "bg-yellow-500";
       case "lost":
-        return "bg-red-500"
+        return "bg-red-500";
       default:
-        return "bg-gray-500"
+        return "bg-gray-500";
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -91,29 +91,41 @@ export function BookDetail({ bookId, onBack, onEdit }: BookDetailProps) {
             <div className="flex-1">
               <div className="flex justify-between items-start">
                 <h2 className="text-2xl font-bold">{book.title}</h2>
-                <Badge className={getStatusColor(book.status)}>{getStatusLabel(book.status)}</Badge>
+                <Badge className={getStatusColor(book.status)}>
+                  {getStatusLabel(book.status)}
+                </Badge>
               </div>
 
-              <p className="text-lg text-muted-foreground mt-2">{book.author}</p>
+              <p className="text-lg text-muted-foreground mt-2">
+                {book.author}
+              </p>
 
               <div className="grid grid-cols-2 gap-4 mt-6">
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">ISBN</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">
+                    ISBN
+                  </h3>
                   <p>{book.isbn}</p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">出版年</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">
+                    出版年
+                  </h3>
                   <p>{book.publishedYear}</p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">ジャンル</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">
+                    ジャンル
+                  </h3>
                   <p>{book.genre}</p>
                 </div>
               </div>
 
               {book.description && (
                 <div className="mt-6">
-                  <h3 className="text-sm font-medium text-muted-foreground">説明</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">
+                    説明
+                  </h3>
                   <p className="mt-2">{book.description}</p>
                 </div>
               )}
@@ -129,6 +141,5 @@ export function BookDetail({ bookId, onBack, onEdit }: BookDetailProps) {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
-

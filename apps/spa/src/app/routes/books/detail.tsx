@@ -6,11 +6,13 @@ export default function BooksDetailPage() {
 
   const params = useParams();
 
-  const id = params.id ?? ""
+  const id = params.id ?? "";
 
-  return <BookDetail
-    bookId={id}
-    onBack={() => navigate(href("/books"))}
-    onEdit={() => navigate(href("/books/:id/edit", { id }))}
-  />
+  return (
+    <BookDetail
+      bookId={id}
+      onBack={() => navigate(href("/books"))}
+      onEdit={() => navigate(href("/books/:id/edit", { id }))}
+    />
+  );
 }

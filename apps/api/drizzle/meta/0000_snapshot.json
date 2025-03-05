@@ -89,9 +89,7 @@
       "indexes": {
         "books_isbn_unique": {
           "name": "books_isbn_unique",
-          "columns": [
-            "isbn"
-          ],
+          "columns": ["isbn"],
           "isUnique": true
         }
       },

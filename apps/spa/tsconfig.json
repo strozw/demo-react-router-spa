@@ -7,11 +7,7 @@
   ],
   "compilerOptions": {
     // libs
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ES2022"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "jsx": "react-jsx",
     // modules
     "target": "ES2022",
@@ -22,25 +18,17 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     // types
-    "types": [
-      "node",
-      "vite/client"
-    ],
+    "types": ["node", "vite/client"],
     // paths
-    "rootDirs": [
-      ".",
-      "./.react-router/types"
-    ],
+    "rootDirs": [".", "./.react-router/types"],
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     // lint
     "strict": true,
     "noUncheckedIndexedAccess": true,
     // build
-    "noEmit": true,
+    "noEmit": true
   }
 }

@@ -1,55 +1,57 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { PlusCircle, Edit, Eye, Trash2 } from "lucide-react"
-import { queryOptions, useMutation, useQuery } from "@/hooks/api"
-import type { Book } from "@/lib/api/type"
-import { useQueryClient } from "@tanstack/react-query"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { queryOptions, useMutation, useQuery } from "@/hooks/api";
+import type { Book } from "@/lib/api/type";
+import { useQueryClient } from "@tanstack/react-query";
+import { Edit, Eye, PlusCircle, Trash2 } from "lucide-react";
 
 interface BookListProps {
-  onAddBook: () => void
-  onEditBook: (id: string) => void
-  onViewBook: (id: string) => void
+  onAddBook: () => void;
+  onEditBook: (id: string) => void;
+  onViewBook: (id: string) => void;
 }
 
 export function BookList({ onAddBook, onEditBook, onViewBook }: BookListProps) {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
-  const { data: books = [], isLoading: isBooksLoading } = useQuery("get", "/books")
+  const { data: books = [], isLoading: isBooksLoading } = useQuery(
+    "get",
+    "/books",
+  );
 
-  const { mutate: mutateToDeleted } = useMutation(
-    "delete",
-    "/books/{id}",
-    {
-      onSuccess: async (_, args) => {
-        queryClient.setQueryData<typeof books>(queryOptions("get", "/books").queryKey, (old) => {
-          return old?.filter(book => book.id !== args.params.path.id)
-        })
-      }
-    }
-  )
+  const { mutate: mutateToDeleted } = useMutation("delete", "/books/{id}", {
+    onSuccess: async (_, args) => {
+      queryClient.setQueryData<typeof books>(
+        queryOptions("get", "/books").queryKey,
+        (old) => {
+          return old?.filter((book) => book.id !== args.params.path.id);
+        },
+      );
+    },
+  });
 
   const deleteBook = async (id: string) => {
-    mutateToDeleted({ params: { path: { id } } })
-  }
+    mutateToDeleted({ params: { path: { id } } });
+  };
 
   const getStatusColor = (status?: Book["status"]) => {
     switch (status) {
       case "available":
-        return "bg-green-500"
+        return "bg-green-500";
       case "borrowed":
-        return "bg-yellow-500"
+        return "bg-yellow-500";
       case "lost":
-        return "bg-red-500"
+        return "bg-red-500";
       default:
-        return "bg-gray-500"
+        return "bg-gray-500";
     }
-  }
+  };
 
   if (isBooksLoading) {
-    return <div>書籍一覧を取得中...</div>
+    return <div>書籍一覧を取得中...</div>;
   }
 
   return (
@@ -93,13 +95,25 @@ export function BookList({ onAddBook, onEditBook, onViewBook }: BookListProps) {
                   <p className="text-xs">ジャンル: {book.genre}</p>
                 </div>
                 <div className="flex justify-end gap-2 mt-4">
-                  <Button variant="outline" size="sm" onClick={() => onViewBook(book.id)}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onViewBook(book.id)}
+                  >
                     <Eye className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => onEditBook(book.id)}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onEditBook(book.id)}
+                  >
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => deleteBook(book.id)}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => deleteBook(book.id)}
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -111,7 +125,9 @@ export function BookList({ onAddBook, onEditBook, onViewBook }: BookListProps) {
 
       {books.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">蔵書がありません。新しい本を追加してください。</p>
+          <p className="text-muted-foreground">
+            蔵書がありません。新しい本を追加してください。
+          </p>
           <Button onClick={onAddBook} className="mt-4">
             <PlusCircle className="mr-2 h-4 w-4" />
             新規登録
@@ -119,6 +135,5 @@ export function BookList({ onAddBook, onEditBook, onViewBook }: BookListProps) {
         </div>
       )}
     </div>
-  )
+  );
 }
-

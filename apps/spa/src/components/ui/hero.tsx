@@ -1,12 +1,18 @@
-import type { PropsWithChildren, ReactNode } from "react"
-import { Button } from "./button"
-import { href, useNavigate } from "react-router";
+import type { PropsWithChildren, ReactNode } from "react";
+import { useNavigate } from "react-router";
+import { Button } from "./button";
 
-export function Hero({ title, desc, startText = "スタート", onClickStart, children }: PropsWithChildren<{
-  title: ReactNode,
-  desc?: ReactNode,
-  startText?: string
-  onClickStart?: () => void
+export function Hero({
+  title,
+  desc,
+  startText = "スタート",
+  onClickStart,
+  children,
+}: PropsWithChildren<{
+  title: ReactNode;
+  desc?: ReactNode;
+  startText?: string;
+  onClickStart?: () => void;
 }>) {
   const navigate = useNavigate();
 
@@ -18,9 +24,11 @@ export function Hero({ title, desc, startText = "スタート", onClickStart, ch
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
               {title}
             </h1>
-            {desc && <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-              {desc}
-            </p>}
+            {desc && (
+              <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
+                {desc}
+              </p>
+            )}
           </div>
 
           {children}
@@ -29,5 +37,5 @@ export function Hero({ title, desc, startText = "スタート", onClickStart, ch
         </div>
       </div>
     </section>
-  )
+  );
 }

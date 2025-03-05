@@ -7,4 +7,4 @@ export const {
   useInfiniteQuery,
   useSuspenseQuery,
   queryOptions,
-} = createClient(apiClient)
+} = createClient(apiClient);

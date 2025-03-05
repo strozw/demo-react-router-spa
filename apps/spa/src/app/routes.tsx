@@ -1,5 +1,5 @@
-import { BookProvider } from "#/components/book-context"
-import { BookRoutes } from "#/components/book-routes"
+import { BookProvider } from "#/components/book-context";
+import { BookRoutes } from "#/components/book-routes";
 
 export default function Home() {
   return (
@@ -8,6 +8,5 @@ export default function Home() {
         <BookRoutes />
       </BookProvider>
     </main>
-  )
+  );
 }
-

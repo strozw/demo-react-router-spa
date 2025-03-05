@@ -1,15 +1,29 @@
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft, Save } from "lucide-react"
-import { useEffect } from "react"
-import { useMutation, useQuery } from "@/hooks/api"
-import type { components } from "@/lib/api/schema"
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { useMutation, useQuery } from "@/hooks/api";
+import type { components } from "@/lib/api/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeft, Save } from "lucide-react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 const bookSchema = z.object({
   title: z.string().min(1, "タイトルは必須です"),
@@ -20,16 +34,22 @@ const bookSchema = z.object({
     .min(1000, "有効な出版年を入力してください")
     .max(new Date().getFullYear(), "未来の年は入力できません"),
   genre: z.string().min(1, "ジャンルは必須です"),
-  description: z.string().optional().transform(value => value || ""),
-  coverUrl: z.string().optional().transform(value => value || ""),
+  description: z
+    .string()
+    .optional()
+    .transform((value) => value || ""),
+  coverUrl: z
+    .string()
+    .optional()
+    .transform((value) => value || ""),
   status: z.enum(["available", "borrowed", "lost"]),
-})
+});
 
-type BookFormValues = z.infer<typeof bookSchema>
+type BookFormValues = z.infer<typeof bookSchema>;
 
 interface BookFormProps {
-  bookId?: string
-  onCancel: () => void
+  bookId?: string;
+  onCancel: () => void;
 }
 
 export function BookForm({ bookId, onCancel }: BookFormProps) {
@@ -38,38 +58,44 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
     "/books",
     {
       onSuccess: () => {
-        onCancel()
-      }
+        onCancel();
+      },
     },
-  )
+  );
 
   const { mutate: mutateToUpdated, error: errorAboutUpdate } = useMutation(
     "patch",
     "/books/{id}",
     {
       onSuccess: () => {
-        onCancel()
-      }
+        onCancel();
+      },
     },
-  )
+  );
 
   const { data: book, isLoading: isBookLoading } = useQuery(
     "get",
     "/books/{id}",
     { params: { path: { id: bookId ?? "" } } },
     { enabled: !!bookId },
-  )
+  );
 
-  const addBook = async (book: components['schemas']['CreateBook']) => mutateToCreated({ body: book });
+  const addBook = async (book: components["schemas"]["CreateBook"]) =>
+    mutateToCreated({ body: book });
 
-  const updateBook = async (id: string, book: components['schemas']['UpdateBook']) => mutateToUpdated({
-    params: { path: { id }, },
-    body: book,
-  });
+  const updateBook = async (
+    id: string,
+    book: components["schemas"]["UpdateBook"],
+  ) =>
+    mutateToUpdated({
+      params: { path: { id } },
+      body: book,
+    });
 
-  const apiErrorMessage = errorAboutCreate?.message || errorAboutUpdate?.message
+  const apiErrorMessage =
+    errorAboutCreate?.message || errorAboutUpdate?.message;
 
-  const isEditing = !!bookId
+  const isEditing = !!bookId;
 
   const form = useForm<BookFormValues>({
     resolver: zodResolver(bookSchema),
@@ -83,43 +109,41 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
       coverUrl: "",
       status: "available",
     },
-  })
+  });
 
   useEffect(() => {
     switch (apiErrorMessage) {
       case "ISBN already exists":
-        form.setError("isbn", { message: "このISBNはすでに登録されています" })
-        break
+        form.setError("isbn", { message: "このISBNはすでに登録されています" });
+        break;
     }
-  }, [apiErrorMessage])
+  }, [form.setError, apiErrorMessage]);
 
   useEffect(() => {
-    if (isEditing && book) {
-      if (book) {
-        form.reset({
-          title: book.title,
-          author: book.author,
-          isbn: book.isbn,
-          publishedYear: book.publishedYear,
-          genre: book.genre,
-          description: book.description,
-          coverUrl: book.coverUrl || "",
-          status: book.status,
-        })
-      }
+    if (isEditing && book && book) {
+      form.reset({
+        title: book.title,
+        author: book.author,
+        isbn: book.isbn,
+        publishedYear: book.publishedYear,
+        genre: book.genre,
+        description: book.description,
+        coverUrl: book.coverUrl || "",
+        status: book.status,
+      });
     }
-  }, [bookId, book, isEditing, form])
+  }, [book, isEditing, form]);
 
   const onSubmit = async (data: BookFormValues) => {
     if (isEditing && bookId) {
-      await updateBook(bookId, data)
+      await updateBook(bookId, data);
     } else {
-      await addBook(data)
+      await addBook(data);
     }
-  }
+  };
 
   if (isEditing && isBookLoading) {
-    return <div>書籍情報を取得中...</div>
+    return <div>書籍情報を取得中...</div>;
   }
 
   return (
@@ -128,7 +152,9 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
         <Button variant="outline" size="icon" onClick={onCancel}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <h1 className="text-2xl font-bold">{isEditing ? "蔵書を編集" : "新規蔵書登録"}</h1>
+        <h1 className="text-2xl font-bold">
+          {isEditing ? "蔵書を編集" : "新規蔵書登録"}
+        </h1>
       </div>
 
       <Form {...form}>
@@ -210,7 +236,10 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>状態</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="状態を選択" />
@@ -236,7 +265,9 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
                   <FormControl>
                     <Input placeholder="表紙画像のURL" {...field} />
                   </FormControl>
-                  <FormDescription>画像のURLを入力してください（任意）</FormDescription>
+                  <FormDescription>
+                    画像のURLを入力してください（任意）
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -250,7 +281,11 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
               <FormItem>
                 <FormLabel>説明</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="本の説明" className="min-h-[120px]" {...field} />
+                  <Textarea
+                    placeholder="本の説明"
+                    className="min-h-[120px]"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -269,6 +304,5 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
         </form>
       </Form>
     </div>
-  )
+  );
 }
-
