@@ -1,4 +1,3 @@
-import { BookProvider } from "@/components/book-context";
 import { Outlet } from "react-router";
 
 export default function BooksLayout() {
