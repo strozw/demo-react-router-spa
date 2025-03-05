@@ -1,4 +1,4 @@
-import { apiClient } from "#lib/api/index";
+import { apiClient } from "@/lib/api";
 import createClient from "openapi-react-query";
 
 export const {
