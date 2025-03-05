@@ -1,11 +1,11 @@
 "use client"
 
-import { useBooks, type Book } from "@/components/book-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { PlusCircle, Edit, Eye, Trash2 } from "lucide-react"
 import { useMutation, useQuery } from "@/hooks/api"
+import type { Book } from "@/lib/api/type"
 
 interface BookListProps {
   onAddBook: () => void
