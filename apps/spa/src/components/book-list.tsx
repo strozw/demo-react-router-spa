@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { PlusCircle, Edit, Eye, Trash2 } from "lucide-react"
-import { useMutation, useQuery } from "@/hooks/api"
+import { queryOptions, useMutation, useQuery } from "@/hooks/api"
 import type { Book } from "@/lib/api/type"
+import { useQueryClient } from "@tanstack/react-query"
 
 interface BookListProps {
   onAddBook: () => void
@@ -14,11 +15,25 @@ interface BookListProps {
 }
 
 export function BookList({ onAddBook, onEditBook, onViewBook }: BookListProps) {
+  const queryClient = useQueryClient()
+
   const { data: books = [], isLoading: isBooksLoading } = useQuery("get", "/books")
 
-  const { mutate: mutateToDeleted } = useMutation("delete", "/books/{id}")
+  const { mutate: mutateToDeleted } = useMutation(
+    "delete",
+    "/books/{id}",
+    {
+      onSuccess: async (_, args) => {
+        queryClient.setQueryData<typeof books>(queryOptions("get", "/books").queryKey, (old) => {
+          return old?.filter(book => book.id !== args.params.path.id)
+        })
+      }
+    }
+  )
 
-  const deleteBook = async (id: string) => mutateToDeleted({ params: { path: { id } } })
+  const deleteBook = async (id: string) => {
+    mutateToDeleted({ params: { path: { id } } })
+  }
 
   const getStatusColor = (status?: Book["status"]) => {
     switch (status) {
