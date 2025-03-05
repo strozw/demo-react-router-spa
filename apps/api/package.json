@@ -4,10 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsx src/index.ts",
-    "generate": "drizzle-kit generate",
-    "migrate": "tsx src/db/migrate.ts"
+    "dev": "pnpm db-push && tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "drizzle-kit": "drizzle-kit",
+    "db-push": "drizzle-kit push",
+    "db-generate": "drizzle-kit generate",
+    "db-migrate": "drizzle-kit migrate"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.8",
