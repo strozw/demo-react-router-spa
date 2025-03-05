@@ -5,7 +5,7 @@ import bookRoutes from './routes/book';
 
 const app = new OpenAPIHono();
 
-// Swagger UI
+// OpenAPI Docs
 app.doc('/docs', {
   openapi: '3.0.0',
   info: {
@@ -21,6 +21,7 @@ app.doc('/docs', {
   ],
 });
 
+// Swagger UI
 app.get('/ui', swaggerUI({ url: '/docs' }));
 
 // Routes
@@ -28,7 +29,10 @@ app.route('/books', bookRoutes);
 
 // Start server
 const port = 3000;
-console.log(`Server is running on port ${port}`);
+
+console.log(`Server is running: http://localhost:${port}`);
+console.log(`OpenAPI Docs: http://localhost:${port}/docs`);
+console.log(`Swagger UI: http://localhost:${port}/ui`);
 
 serve({
   fetch: app.fetch,
