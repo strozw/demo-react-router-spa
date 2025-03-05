@@ -243,11 +243,17 @@ app.openapi(
   async (c) => {
     const id = c.req.param('id') ?? '';
 
-    const result = await db.delete(books).where(eq(books.id, id)).returning();
+    const book = (await db
+      .select()
+      .from(books)
+      .where(eq(books.id, id))
+      .limit(1)).at(0);
 
-    if (result.length === 0) {
+    if (!book) {
       return c.json({ message: 'Book not found' }, 404);
     }
+
+    await db.delete(books).where(eq(books.id, id));
 
     return new Response(null, { status: 204 });
   }
