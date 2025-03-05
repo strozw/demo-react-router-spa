@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { useBooks } from "@/components/book-context"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -9,6 +8,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowLeft, Save } from "lucide-react"
 import { useEffect } from "react"
+import { useMutation, useQuery } from "@/hooks/api"
+import type { components } from "@/lib/api/schema"
 
 const bookSchema = z.object({
   title: z.string().min(1, "タイトルは必須です"),
@@ -19,8 +20,8 @@ const bookSchema = z.object({
     .min(1000, "有効な出版年を入力してください")
     .max(new Date().getFullYear(), "未来の年は入力できません"),
   genre: z.string().min(1, "ジャンルは必須です"),
-  description: z.string().optional(),
-  coverUrl: z.string().optional(),
+  description: z.string().optional().transform(value => value || ""),
+  coverUrl: z.string().optional().transform(value => value || ""),
   status: z.enum(["available", "borrowed", "lost"]),
 })
 
@@ -32,7 +33,40 @@ interface BookFormProps {
 }
 
 export function BookForm({ bookId, onCancel }: BookFormProps) {
-  const { addBook, updateBook, getBook } = useBooks()
+  const { mutate: mutateToCreated } = useMutation(
+    "post",
+    "/books",
+    {
+      onSuccess: () => {
+        onCancel()
+      }
+    },
+  )
+
+  const { mutate: mutateToUpdated } = useMutation(
+    "patch",
+    "/books/{id}",
+    {
+      onSuccess: () => {
+        onCancel()
+      }
+    },
+  )
+
+  const { data: book, isLoading: isBookLoading } = useQuery(
+    "get",
+    "/books/{id}",
+    { params: { path: { id: bookId ?? "" } } },
+    { enabled: !!bookId },
+  )
+
+  const addBook = async (book: components['schemas']['CreateBook']) => mutateToCreated({ body: book });
+
+  const updateBook = async (id: string, book: components['schemas']['UpdateBook']) => mutateToUpdated({
+    params: { path: { id }, },
+    body: book,
+  });
+
   const isEditing = !!bookId
 
   const form = useForm<BookFormValues>({
@@ -50,8 +84,7 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
   })
 
   useEffect(() => {
-    if (isEditing && bookId) {
-      const book = getBook(bookId)
+    if (isEditing && book) {
       if (book) {
         form.reset({
           title: book.title,
@@ -65,15 +98,18 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
         })
       }
     }
-  }, [bookId, getBook, isEditing, form])
+  }, [bookId, book, isEditing, form])
 
-  const onSubmit = (data: BookFormValues) => {
+  const onSubmit = async (data: BookFormValues) => {
     if (isEditing && bookId) {
-      updateBook(bookId, data)
+      await updateBook(bookId, data)
     } else {
-      addBook(data)
+      await addBook(data)
     }
-    onCancel()
+  }
+
+  if (isEditing && isBookLoading) {
+    return <div>書籍情報を取得中...</div>
   }
 
   return (

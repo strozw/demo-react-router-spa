@@ -1,4 +1,4 @@
 import createClient from "openapi-fetch";
 import type { paths } from "./schema";
 
-export const apiClient = createClient<paths>({ baseUrl: "https://localhost:3000/" });
+export const apiClient = createClient<paths>({ baseUrl: "http://localhost:3000/" });

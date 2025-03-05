@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { PlusCircle, Edit, Eye, Trash2 } from "lucide-react"
+import { useMutation, useQuery } from "@/hooks/api"
 
 interface BookListProps {
   onAddBook: () => void
@@ -13,9 +14,13 @@ interface BookListProps {
 }
 
 export function BookList({ onAddBook, onEditBook, onViewBook }: BookListProps) {
-  const { books, deleteBook } = useBooks()
+  const { data: books = [], isLoading: isBooksLoading } = useQuery("get", "/books")
 
-  const getStatusColor = (status: Book["status"]) => {
+  const { mutate: mutateToDeleted } = useMutation("delete", "/books/{id}")
+
+  const deleteBook = async (id: string) => mutateToDeleted({ params: { path: { id } } })
+
+  const getStatusColor = (status?: Book["status"]) => {
     switch (status) {
       case "available":
         return "bg-green-500"
@@ -26,6 +31,10 @@ export function BookList({ onAddBook, onEditBook, onViewBook }: BookListProps) {
       default:
         return "bg-gray-500"
     }
+  }
+
+  if (isBooksLoading) {
+    return <div>書籍一覧を取得中...</div>
   }
 
   return (

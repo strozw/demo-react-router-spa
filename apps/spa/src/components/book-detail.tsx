@@ -1,10 +1,10 @@
 "use client"
 
-import { useBooks } from "@/components/book-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Edit } from "lucide-react"
+import { useQuery } from "@/hooks/api"
 
 interface BookDetailProps {
   bookId: string
@@ -13,8 +13,16 @@ interface BookDetailProps {
 }
 
 export function BookDetail({ bookId, onBack, onEdit }: BookDetailProps) {
-  const { getBook } = useBooks()
-  const book = getBook(bookId)
+  const { data: book, isLoading: isBookLoading } = useQuery(
+    "get",
+    "/books/{id}",
+    { params: { path: { id: bookId ?? "" } } },
+    { enabled: !!bookId },
+  )
+
+  if (isBookLoading) {
+    return <div>書籍情報を取得中...</div>
+  }
 
   if (!book) {
     return (
