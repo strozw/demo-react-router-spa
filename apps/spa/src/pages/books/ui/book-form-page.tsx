@@ -1,4 +1,6 @@
-import { Button } from "@/components/ui/button";
+import { $api } from "@/shared/api";
+import type { components } from "@/shared/api";
+import { Button } from "@/shared/ui/button";
 import {
   Form,
   FormControl,
@@ -7,18 +9,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { useMutation, useQuery } from "@/hooks/api";
-import type { components } from "@/lib/api/schema";
+} from "@/shared/ui/select";
+import { Textarea } from "@/shared/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Save } from "lucide-react";
 import { useEffect } from "react";
@@ -52,8 +52,8 @@ interface BookFormProps {
   onCancel: () => void;
 }
 
-export function BookForm({ bookId, onCancel }: BookFormProps) {
-  const { mutate: mutateToCreated, error: errorAboutCreate } = useMutation(
+export function BookFormPage({ bookId, onCancel }: BookFormProps) {
+  const { mutate: mutateToCreated, error: errorAboutCreate } = $api.useMutation(
     "post",
     "/books",
     {
@@ -62,8 +62,7 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
       },
     },
   );
-
-  const { mutate: mutateToUpdated, error: errorAboutUpdate } = useMutation(
+  const { mutate: mutateToUpdated, error: errorAboutUpdate } = $api.useMutation(
     "patch",
     "/books/{id}",
     {
@@ -73,7 +72,7 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
     },
   );
 
-  const { data: book, isLoading: isBookLoading } = useQuery(
+  const { data: book, isLoading: isBookLoading } = $api.useQuery(
     "get",
     "/books/{id}",
     { params: { path: { id: bookId ?? "" } } },

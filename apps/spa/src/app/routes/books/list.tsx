@@ -1,11 +1,11 @@
-import { BookList } from "@/components/book-list";
+import { BookListPage } from "@/pages/books";
 import { href, useNavigate } from "react-router";
 
-export default function BooksListPage() {
+export default function BooksListRoute() {
   const navigate = useNavigate();
 
   return (
-    <BookList
+    <BookListPage
       onAddBook={() => navigate(href("/books/new"))}
       onViewBook={(id) => navigate(href("/books/:id", { id }))}
       onEditBook={(id) => navigate(href("/books/:id/edit", { id }))}

@@ -1,10 +1,10 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { queryOptions, useMutation, useQuery } from "@/hooks/api";
-import type { Book } from "@/lib/api/type";
+import { $api } from "@/shared/api";
+import type { Book } from "@/shared/api/";
+import { Badge } from "@/shared/ui/badge";
+import { Button } from "@/shared/ui/button";
+import { Card, CardContent } from "@/shared/ui/card";
 import { useQueryClient } from "@tanstack/react-query";
 import { Edit, Eye, PlusCircle, Trash2 } from "lucide-react";
 
@@ -14,24 +14,32 @@ interface BookListProps {
   onViewBook: (id: string) => void;
 }
 
-export function BookList({ onAddBook, onEditBook, onViewBook }: BookListProps) {
+export function BookListPage({
+  onAddBook,
+  onEditBook,
+  onViewBook,
+}: BookListProps) {
   const queryClient = useQueryClient();
 
-  const { data: books = [], isLoading: isBooksLoading } = useQuery(
+  const { data: books = [], isLoading: isBooksLoading } = $api.useQuery(
     "get",
     "/books",
   );
 
-  const { mutate: mutateToDeleted } = useMutation("delete", "/books/{id}", {
-    onSuccess: async (_, args) => {
-      queryClient.setQueryData<typeof books>(
-        queryOptions("get", "/books").queryKey,
-        (old) => {
-          return old?.filter((book) => book.id !== args.params.path.id);
-        },
-      );
+  const { mutate: mutateToDeleted } = $api.useMutation(
+    "delete",
+    "/books/{id}",
+    {
+      onSuccess: async (_, args) => {
+        queryClient.setQueryData<typeof books>(
+          $api.queryOptions("get", "/books").queryKey,
+          (old) => {
+            return old?.filter((book) => book.id !== args.params.path.id);
+          },
+        );
+      },
     },
-  });
+  );
 
   const deleteBook = async (id: string) => {
     mutateToDeleted({ params: { path: { id } } });

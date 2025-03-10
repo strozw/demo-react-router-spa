@@ -1,12 +1,14 @@
-import { BookForm } from "@/components/book-form";
-import { href, useNavigate, useParams } from "react-router";
+import { BookFormPage } from "@/pages/books";
+import { href, useNavigate } from "react-router";
+import type { Route } from "./+types/edit";
 
-export default function BooksEditPage() {
+export default function BooksEditRoute({ params }: Route.ComponentProps) {
   const navigate = useNavigate();
 
-  const params = useParams();
-
-  const id = params.id ?? "";
-
-  return <BookForm bookId={id} onCancel={() => navigate(href("/books"))} />;
+  return (
+    <BookFormPage
+      bookId={params.id}
+      onCancel={() => navigate(href("/books"))}
+    />
+  );
 }

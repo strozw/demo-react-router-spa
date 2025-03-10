@@ -1,18 +1,15 @@
-import { BookDetail } from "@/components/book-detail";
-import { href, useNavigate, useParams } from "react-router";
+import { BookDetailPage } from "@/pages/books";
+import { href, useNavigate } from "react-router";
+import type { Route } from "./+types/detail";
 
-export default function BooksDetailPage() {
+export default function BooksDetailRoute({ params }: Route.ComponentProps) {
   const navigate = useNavigate();
 
-  const params = useParams();
-
-  const id = params.id ?? "";
-
   return (
-    <BookDetail
-      bookId={id}
+    <BookDetailPage
+      bookId={params.id}
       onBack={() => navigate(href("/books"))}
-      onEdit={() => navigate(href("/books/:id/edit", { id }))}
+      onEdit={() => navigate(href("/books/:id/edit", { id: params.id }))}
     />
   );
 }
