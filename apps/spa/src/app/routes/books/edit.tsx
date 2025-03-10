@@ -1,4 +1,4 @@
-import { BookFormPage } from "@/pages/books";
+import { BookFormPage } from "@/pages/book-form-page";
 import { href, useNavigate } from "react-router";
 import type { Route } from "./+types/edit";
 

@@ -1,4 +1,4 @@
-import { BookListPage } from "@/pages/books";
+import { BookListPage } from "@/pages/book-list-page";
 import { href, useNavigate } from "react-router";
 
 export default function BooksListRoute() {

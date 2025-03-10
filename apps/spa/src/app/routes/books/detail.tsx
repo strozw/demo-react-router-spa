@@ -1,4 +1,4 @@
-import { BookDetailPage } from "@/pages/books";
+import { BookDetailPage } from "@/pages/book-detail-page";
 import { href, useNavigate } from "react-router";
 import type { Route } from "./+types/detail";
 

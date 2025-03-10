@@ -2,13 +2,14 @@
 
 import { $api } from "@/shared/api";
 import type { Book } from "@/shared/api/";
+import { cn } from "@/shared/lib/ui-utils";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent } from "@/shared/ui/card";
 import { useQueryClient } from "@tanstack/react-query";
 import { Edit, Eye, PlusCircle, Trash2 } from "lucide-react";
 
-interface BookListProps {
+interface BookListPageProps {
   onAddBook: () => void;
   onEditBook: (id: string) => void;
   onViewBook: (id: string) => void;
@@ -18,7 +19,7 @@ export function BookListPage({
   onAddBook,
   onEditBook,
   onViewBook,
-}: BookListProps) {
+}: BookListPageProps) {
   const queryClient = useQueryClient();
 
   const { data: books = [], isLoading: isBooksLoading } = $api.useQuery(
@@ -63,7 +64,7 @@ export function BookListPage({
   }
 
   return (
-    <div className="space-y-6">
+    <div className={cn("space-y-6")}>
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">蔵書管理</h1>
         <Button onClick={onAddBook}>

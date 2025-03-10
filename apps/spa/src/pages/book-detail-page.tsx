@@ -6,13 +6,17 @@ import { Button } from "@/shared/ui/button";
 import { Card, CardContent } from "@/shared/ui/card";
 import { ArrowLeft, Edit } from "lucide-react";
 
-interface BookDetailProps {
+interface BookDetailPageProps {
   bookId: string;
   onBack: () => void;
   onEdit: () => void;
 }
 
-export function BookDetailPage({ bookId, onBack, onEdit }: BookDetailProps) {
+export function BookDetailPage({
+  bookId,
+  onBack,
+  onEdit,
+}: BookDetailPageProps) {
   const { data: book, isLoading: isBookLoading } = $api.useQuery(
     "get",
     "/books/{id}",

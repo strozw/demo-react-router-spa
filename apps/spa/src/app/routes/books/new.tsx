@@ -1,4 +1,4 @@
-import { BookFormPage } from "@/pages/books";
+import { BookFormPage } from "@/pages/book-form-page";
 import { href, useNavigate } from "react-router";
 
 export default function BooksNewRoute() {
