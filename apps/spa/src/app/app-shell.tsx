@@ -1,6 +1,9 @@
+import { queryClient } from "@/shared/api";
+import { QueryClientProvider } from "@tanstack/react-query";
 import type { PropsWithChildren } from "react";
-import { ApiProvider } from "./providers/api-provider";
 
 export function AppShell({ children }: PropsWithChildren) {
-  return <ApiProvider>{children}</ApiProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
 }

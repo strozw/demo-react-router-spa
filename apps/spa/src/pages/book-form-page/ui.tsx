@@ -1,4 +1,6 @@
-import { Button } from "@/components/ui/button";
+import { $api } from "@/shared/api";
+import type { components } from "@/shared/api";
+import { Button } from "@/shared/ui/button";
 import {
   Form,
   FormControl,
@@ -7,53 +9,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { useMutation, useQuery } from "@/hooks/api";
-import type { components } from "@/lib/api/schema";
+} from "@/shared/ui/select";
+import { Textarea } from "@/shared/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Save } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { type BookFormValues, bookFormSchema } from "./model";
 
-const bookSchema = z.object({
-  title: z.string().min(1, "タイトルは必須です"),
-  author: z.string().min(1, "著者は必須です"),
-  isbn: z.string().min(1, "ISBNは必須です"),
-  publishedYear: z.coerce
-    .number()
-    .min(1000, "有効な出版年を入力してください")
-    .max(new Date().getFullYear(), "未来の年は入力できません"),
-  genre: z.string().min(1, "ジャンルは必須です"),
-  description: z
-    .string()
-    .optional()
-    .transform((value) => value || ""),
-  coverUrl: z
-    .string()
-    .optional()
-    .transform((value) => value || ""),
-  status: z.enum(["available", "borrowed", "lost"]),
-});
-
-type BookFormValues = z.infer<typeof bookSchema>;
-
-interface BookFormProps {
+interface BookFormPageProps {
   bookId?: string;
   onCancel: () => void;
 }
 
-export function BookForm({ bookId, onCancel }: BookFormProps) {
-  const { mutate: mutateToCreated, error: errorAboutCreate } = useMutation(
+export function BookFormPage({ bookId, onCancel }: BookFormPageProps) {
+  const { mutate: mutateToCreated, error: errorAboutCreate } = $api.useMutation(
     "post",
     "/books",
     {
@@ -62,8 +40,7 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
       },
     },
   );
-
-  const { mutate: mutateToUpdated, error: errorAboutUpdate } = useMutation(
+  const { mutate: mutateToUpdated, error: errorAboutUpdate } = $api.useMutation(
     "patch",
     "/books/{id}",
     {
@@ -73,7 +50,7 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
     },
   );
 
-  const { data: book, isLoading: isBookLoading } = useQuery(
+  const { data: book, isLoading: isBookLoading } = $api.useQuery(
     "get",
     "/books/{id}",
     { params: { path: { id: bookId ?? "" } } },
@@ -98,7 +75,7 @@ export function BookForm({ bookId, onCancel }: BookFormProps) {
   const isEditing = !!bookId;
 
   const form = useForm<BookFormValues>({
-    resolver: zodResolver(bookSchema),
+    resolver: zodResolver(bookFormSchema),
     defaultValues: {
       title: "",
       author: "",
