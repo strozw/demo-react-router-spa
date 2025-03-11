@@ -40,6 +40,8 @@
     "@types/node": "^22",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "dependency-cruiser": "^16.10.0",
+    "fsd-cruise": "1.0.5-beta.6",
     "openapi-typescript": "^7.6.1",
     "react-router-devtools": "^1.1.6",
     "steiger": "^0.5.5",

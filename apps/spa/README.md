@@ -11,7 +11,9 @@
 
 ## アーキテクチャ
 
-FSD 2.1 を採用
+[FSD 2.1](https://feature-sliced.design/ja/) を採用
+
+![現在のアーキテクチャを図示したもの](./docs/images/project-structure.png)
 
 ### ディレクトリ構成
 
@@ -41,7 +43,7 @@ src/
       api/ ... Feature 固有のビジネスロジック
       index.tx ... Feature の Public API を export
 
-  entities/ ... API や DB の型ではなく、現実世界に則したドメインモデル
+  entities/ ... API や DB の型ではなく、現実世界に則したドメインモデル (コンテンツ・モデル)
     [entity-name]/
       ui/ .... Entity を視覚的に表現する共通の UI コンポーネントを定義する
       model/ ... Entity の型やスキーマを定義する
@@ -60,10 +62,14 @@ src/
         index.ts ... ライブラリの Public API を export
 ```
 
-### 参考
+### 資料
 
-- https://feature-sliced.design/ja/docs/reference/layers
-- 
+- クイックスタート
+  - https://feature-sliced.design/ja/docs/get-started
+- ガイド
+  - https://feature-sliced.design/ja/docs/guides  
+- リファレンス
+  - https://feature-sliced.design/ja/docs/reference
 
 
 
