@@ -1,6 +1,6 @@
-import type { components } from "./openapi/schema";
+import type { components } from "./schema";
 
-export type { components } from "./openapi/schema";
+export type { components } from "./schema";
 
 export type Book = components["schemas"]["Book"];
 
@@ -10,8 +10,8 @@ export type CreateBook = components["schemas"]["CreateBook"];
 
 export type UpdateBook = components["schemas"]["UpdateBook"];
 
-export { $api } from "./openapi/hooks";
+export { $api } from "./hooks";
 
-export { apiClient } from "./openapi/client";
+export { apiClient } from "./client";
 
-export { ApiProvider } from "./api-provider";
+export { queryClient } from "./query-client";

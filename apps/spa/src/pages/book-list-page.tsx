@@ -1,7 +1,7 @@
 "use client";
 
 import { $api } from "@/shared/api";
-import type { Book } from "@/shared/api/";
+import type { Book } from "@/shared/api";
 import { cn } from "@/shared/lib/ui-utils";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
