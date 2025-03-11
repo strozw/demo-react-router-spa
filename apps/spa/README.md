@@ -79,17 +79,27 @@ src/
 ## 開発サーバーの起動
 
 ```bash
-npm run dev
+pnpm run dev
+```
+
+## アーキテクチャの検証
+
+FSD のルールを守れているかを検証する
+
+```bash
+pnpm run lint:steiger
 ```
 
 ## ビルド
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 ## ビルド結果のプレビュー
 
 ```bash
-npm run start
+pnpm run start
 ```
+
+
