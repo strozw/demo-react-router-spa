@@ -9,8 +9,7 @@
     "dev": "pnpm turbo run dev",
     "fix:biome": "biome check --write .",
     "fix:prettier": "prettier --write .",
-    "fix": "pnpx concurrently \"pnpm:fix:*\" -c \"blue,magenta\"",
-    "lint:steiger": "steiger ./src"
+    "fix": "pnpx concurrently \"pnpm:fix:*\" -c \"blue,magenta\""
   },
   "keywords": [],
   "author": "",

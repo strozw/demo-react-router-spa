@@ -7,7 +7,8 @@
     "dev": "react-router dev",
     "start": "pnpx http-serve ./build/client --fallback",
     "typecheck": "react-router typegen && tsc",
-    "api-schema-generate": "pnpx openapi-typescript http://localhost:3000/docs -o ./src/lib/api/schema.d.ts"
+    "api-schema-generate": "pnpx openapi-typescript http://localhost:3000/docs -o ./src/lib/api/schema.d.ts",
+    "lint:steiger": "steiger ./src"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.3",
