@@ -6,10 +6,10 @@ React RouterとReactを使用したシングルページアプリケーション
 
 ## 含むアプリケーション
 
-|パス|内容|
-|---|---|
-|apps/api|SPAで利用するAPI|
-|apps/spa|React Router で実装された SPA|
+| パス                   | 内容                          |
+| ---------------------- | ----------------------------- |
+| [apps/api](./apps/api) | SPAで利用するAPI              |
+| [apps/spa](./apps/spa) | React Router で実装された SPA |
 
 ## インストール
 
