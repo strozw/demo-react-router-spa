@@ -22,7 +22,7 @@ pnpm install
 以下の npm script を実行することで、API と SPA の開発サーバーを起動できます。
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 ### 個別に起動
