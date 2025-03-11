@@ -15,7 +15,8 @@
 
 ![現在のアーキテクチャを図示したもの](./docs/images/project-structure.png)
 
-### ディレクトリ構成
+<details>
+  <summary><strong>ディレクトリ構成</strong></summary>
 
 ```plaintext
 src/
@@ -61,8 +62,10 @@ src/
       [lib-name]/ ... あるいは [lib-name].ts として定義する
         index.ts ... ライブラリの Public API を export
 ```
+</details>
 
-### 資料
+<details>
+  <summary><strong>資料</strong></summary>
 
 - クイックスタート
   - https://feature-sliced.design/ja/docs/get-started
@@ -70,7 +73,7 @@ src/
   - https://feature-sliced.design/ja/docs/guides  
 - リファレンス
   - https://feature-sliced.design/ja/docs/reference
-
+</details>
 
 
 ## 開発サーバーの起動
