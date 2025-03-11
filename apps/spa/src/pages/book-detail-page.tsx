@@ -1,19 +1,23 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { useQuery } from "@/hooks/api";
+import { $api } from "@/shared/api";
+import { Badge } from "@/shared/ui/badge";
+import { Button } from "@/shared/ui/button";
+import { Card, CardContent } from "@/shared/ui/card";
 import { ArrowLeft, Edit } from "lucide-react";
 
-interface BookDetailProps {
+interface BookDetailPageProps {
   bookId: string;
   onBack: () => void;
   onEdit: () => void;
 }
 
-export function BookDetail({ bookId, onBack, onEdit }: BookDetailProps) {
-  const { data: book, isLoading: isBookLoading } = useQuery(
+export function BookDetailPage({
+  bookId,
+  onBack,
+  onEdit,
+}: BookDetailPageProps) {
+  const { data: book, isLoading: isBookLoading } = $api.useQuery(
     "get",
     "/books/{id}",
     { params: { path: { id: bookId ?? "" } } },
