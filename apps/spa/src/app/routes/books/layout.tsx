@@ -1,10 +1,9 @@
-import { BooksPageLayout } from "@/widgets/books-page-layout";
 import { Outlet } from "react-router";
 
 export default function BooksRouteLayout() {
   return (
-    <BooksPageLayout>
+    <div className="px-4 py-4">
       <Outlet />
-    </BooksPageLayout>
+    </div>
   );
 }
